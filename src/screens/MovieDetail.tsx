@@ -1,41 +1,35 @@
-import React from 'react'
-import { View, Text, Button } from 'react-native'
-import { API_URL, API_ACCESS_TOKEN } from '@env' // Ditambahkan
+import React, { useState, useEffect } from 'react'
+import { Text, View } from 'react-native'
 
-const MovieDetail = ({ navigation }: any): any => {
-  const fetchData = (): void => {
-    if (API_URL == null || API_ACCESS_TOKEN.length == null) {
-      throw new Error('ENV not found')
-    }
+const MovieDetail = ({ route }: any): JSX.Element => {
+  const { id } = route.params
+  const [movieData, setMovieData] = useState<any>({})
 
-    const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: `Bearer ${API_ACCESS_TOKEN}`,
-      },
-    }
-
-    fetch(API_URL, options)
+  useEffect(() => {
+    fetch(`/movie/${id}`)
       .then((response) => response.json())
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Movie Detail Page</Text>
-        <Button
-          title="Fetch Data"
-          onPress={() => {
-            fetchData()
-          }}
-        />
-      </View>
-    )
-  }
-  
-  export default MovieDetail
+      .then((data) => setMovieData(data))
+      .catch((error) => console.error(error))
+  }, [id]) // run the effect when the id changes
+
+  return (
+    <View
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        marginTop: 32,
+      }}
+    >
+      <Text style={{ fontSize: 30 }}>Movie ID: {id}</Text>
+      {movieData && ( // only render the movie data if it's available
+        <View>
+          <Text>Movie Title: {movieData?.title}</Text>
+          <Text>Movie Description: {movieData?.overview}</Text>
+          {/* render other movie data fields here */}
+        </View>
+      )}
+    </View>
+  )
+}
+
+export default MovieDetail
