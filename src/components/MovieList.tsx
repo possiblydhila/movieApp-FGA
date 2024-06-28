@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, FlatList, Image } from 'react-native'
 import type { MovieListProps, Movie } from '../types/app'
 import { API_ACCESS_TOKEN } from '@env'
