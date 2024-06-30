@@ -1,21 +1,28 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ImageBackground, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  ImageBackground,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native'
 import { API_ACCESS_TOKEN } from '@env'
-import MovieList from "../components/MovieList";
+import MovieList from '../components/MovieList'
 import { FontAwesome } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import type { MovieListProps, Movie } from '../types/app'
-
 
 export default function MovieDetail({ route }: any): JSX.Element {
   const { id } = route.params
   const [detailMovie, setDetailMovie] = useState<Movie | null>(null)
-  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false)
 
   useEffect(() => {
     getDetailMovie()
-    checkIsFavorite();
+    checkIsFavorite()
   }, [id])
 
   const getDetailMovie = async (): Promise<void> => {
@@ -37,11 +44,10 @@ export default function MovieDetail({ route }: any): JSX.Element {
       .catch((errorResponse) => {
         console.log('Error fetching movie details:', errorResponse)
       })
-    
   }
   console.log(detailMovie)
 
-  const recomendations : MovieListProps = {
+  const recomendations: MovieListProps = {
     title: 'Recomendations',
     path: `/movie/${id}/recommendations`,
     coverType: 'poster',
@@ -49,48 +55,51 @@ export default function MovieDetail({ route }: any): JSX.Element {
 
   const addFavorite = async (movie: Movie): Promise<void> => {
     try {
-      const initialData: string | null = await AsyncStorage.getItem('@FavoriteList');
-      let favMovieList: Movie[] = initialData ? JSON.parse(initialData) : [];
-      favMovieList = [...favMovieList, movie];
-      await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList));
-      setIsFavorite(true);
+      const initialData: string | null =
+        await AsyncStorage.getItem('@FavoriteList')
+      let favMovieList: Movie[] = initialData ? JSON.parse(initialData) : []
+      favMovieList = [...favMovieList, movie]
+      await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList))
+      setIsFavorite(true)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   const removeFavorite = async (id: number): Promise<void> => {
     try {
-      const initialData: string | null = await AsyncStorage.getItem('@FavoriteList');
-      let favMovieList: Movie[] = initialData ? JSON.parse(initialData) : [];
-      favMovieList = favMovieList.filter((movie) => movie.id !== id);
-      await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList));
-      setIsFavorite(false);
+      const initialData: string | null =
+        await AsyncStorage.getItem('@FavoriteList')
+      let favMovieList: Movie[] = initialData ? JSON.parse(initialData) : []
+      favMovieList = favMovieList.filter((movie) => movie.id !== id)
+      await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList))
+      setIsFavorite(false)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   const checkIsFavorite = async (): Promise<void> => {
     try {
-      const initialData: string | null = await AsyncStorage.getItem('@FavoriteList');
-      const favMovieList: Movie[] = initialData ? JSON.parse(initialData) : [];
-      const isFav = favMovieList.some((movie) => movie.id === id);
-      setIsFavorite(isFav);
+      const initialData: string | null =
+        await AsyncStorage.getItem('@FavoriteList')
+      const favMovieList: Movie[] = initialData ? JSON.parse(initialData) : []
+      const isFav = favMovieList.some((movie) => movie.id === id)
+      setIsFavorite(isFav)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   const toggleFavorite = (): void => {
     if (detailMovie) {
       if (isFavorite) {
-        removeFavorite(detailMovie.id);
+        removeFavorite(detailMovie.id)
       } else {
-        addFavorite(detailMovie);
+        addFavorite(detailMovie)
       }
     }
-  };
+  }
 
   if (!detailMovie) {
     return (
@@ -104,7 +113,9 @@ export default function MovieDetail({ route }: any): JSX.Element {
     <ScrollView style={styles.container}>
       {detailMovie.backdrop_path ? (
         <ImageBackground
-          source={{ uri: `https://image.tmdb.org/t/p/w500${detailMovie.backdrop_path}` }}
+          source={{
+            uri: `https://image.tmdb.org/t/p/w500${detailMovie.backdrop_path}`,
+          }}
           style={styles.backdrop}
         >
           <LinearGradient
@@ -112,32 +123,38 @@ export default function MovieDetail({ route }: any): JSX.Element {
             locations={[0.6, 0.8]}
             style={styles.gradientStyle}
           >
-          <Text style={styles.movieTitle}>{detailMovie.title}</Text>
-          <View style={styles.rowRatingFavoriteContainer}>
-            <View style={styles.ratingContainer}>
-              <FontAwesome name="star" size={14} color="yellow" />
-              <Text style={styles.rating}>{detailMovie.vote_average.toFixed(1)}</Text>
-             
+            <Text style={styles.movieTitle}>{detailMovie.title}</Text>
+            <View style={styles.rowRatingFavoriteContainer}>
+              <View style={styles.ratingContainer}>
+                <FontAwesome name="star" size={14} color="yellow" />
+                <Text style={styles.rating}>
+                  {detailMovie.vote_average.toFixed(1)}
+                </Text>
+              </View>
+              <TouchableOpacity onPress={toggleFavorite}>
+                <FontAwesome
+                  name={isFavorite ? 'heart' : 'heart-o'}
+                  size={24}
+                  color="red"
+                />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={toggleFavorite}>
-                <FontAwesome name={isFavorite ? "heart" : "heart-o"} size={24} color="red" />
-            </TouchableOpacity>
-          </View>
-          
-        </LinearGradient>
-      </ImageBackground>
+          </LinearGradient>
+        </ImageBackground>
       ) : (
         <View style={styles.noImage}>
           <Text style={styles.noImageText}>No Image Available</Text>
         </View>
       )}
-     
+
       <View style={styles.detailsContainer}>
         <Text style={styles.overview}>{detailMovie.overview}</Text>
         <View style={styles.infoRow}>
           <View style={styles.infoColumn}>
             <Text style={styles.infoLabel}>Original Language</Text>
-            <Text style={styles.infoValue}>{detailMovie.original_language}</Text>
+            <Text style={styles.infoValue}>
+              {detailMovie.original_language}
+            </Text>
           </View>
           <View style={styles.infoColumn}>
             <Text style={styles.infoLabel}>Popularity</Text>
@@ -147,7 +164,9 @@ export default function MovieDetail({ route }: any): JSX.Element {
         <View style={styles.infoRow}>
           <View style={styles.infoColumn}>
             <Text style={styles.infoLabel}>Release Date</Text>
-            <Text style={styles.infoValue}>{new Date(detailMovie.release_date).toDateString()}</Text>
+            <Text style={styles.infoValue}>
+              {new Date(detailMovie.release_date).toDateString()}
+            </Text>
           </View>
           <View style={styles.infoColumn}>
             <Text style={styles.infoLabel}>Vote Count</Text>
@@ -157,10 +176,10 @@ export default function MovieDetail({ route }: any): JSX.Element {
       </View>
       {/* Add Recommendations here */}
       <MovieList
-          title={recomendations.title}
-          path={recomendations.path}
-          coverType={recomendations.coverType}
-          key={recomendations.title}
+        title={recomendations.title}
+        path={recomendations.path}
+        coverType={recomendations.coverType}
+        key={recomendations.title}
       />
     </ScrollView>
   )
@@ -194,13 +213,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
-    marginBottom: 2
+    marginBottom: 2,
   },
   rating: {
     color: 'yellow',
     fontSize: 18,
     fontWeight: '700',
-    marginBottom: 2
+    marginBottom: 2,
   },
   gradientStyle: {
     padding: 8,
@@ -237,22 +256,27 @@ const styles = StyleSheet.create({
   },
   overview: {
     fontSize: 16,
-    marginBottom: 10,
+    lineHeight: 28,
+    marginTop: 15,
+    marginBottom: 30,
   },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: 20,
   },
   infoColumn: {
     flex: 1,
     paddingHorizontal: 5,
+    marginBottom: 5,
   },
   infoLabel: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
+    marginBottom: 8,
   },
   infoValue: {
     fontSize: 14,
+    marginBottom: 8,
   },
 })

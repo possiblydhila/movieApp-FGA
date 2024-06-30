@@ -37,7 +37,7 @@ const MovieItem = ({ movie, size, coverType }: MovieItemProps): JSX.Element => {
         >
           <Text style={styles.movieTitle}>{movie.title}</Text>
           <View style={styles.ratingContainer}>
-            <FontAwesome name="star" size={16} color="yellow" />
+            <FontAwesome name="star" size={12} color="yellow" />
             <Text style={styles.rating}>{movie.vote_average.toFixed(1)}</Text>
           </View>
         </LinearGradient>
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
   },
   movieTitle: {
     color: 'white',
+    fontSize: 12,
   },
   gradientStyle: {
     padding: 8,
@@ -65,12 +66,16 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   ratingContainer: {
+    position: "absolute",
+    top: 5,
+    right: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 2,
+    gap: 5,
   },
   rating: {
     color: 'yellow',
+    fontSize: 12,
     fontWeight: '700',
   },
 })

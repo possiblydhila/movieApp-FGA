@@ -33,7 +33,7 @@ type HomeScreenProps = {
   
   export default function Home({ navigation }: HomeScreenProps): JSX.Element {
     return (
-      <ScrollView>
+      <ScrollView style={styles.wrapper}>
         <View style={styles.container}>
           {movieLists.map((movieList) => (
             <MovieList
@@ -51,9 +51,13 @@ type HomeScreenProps = {
   
   const styles = StyleSheet.create({
     container: {
-      marginTop: StatusBar.currentHeight ?? 32,
       alignItems: 'center',
       justifyContent: 'center',
-      rowGap: 16,
+      rowGap: 20,
+      paddingLeft: 8,
+      paddingRight: 8,
+    },
+    wrapper: {
+      marginTop: 60,
     },
   })

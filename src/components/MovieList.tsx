@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, FlatList, Image } from 'react-native'
+import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native'
 import type { MovieListProps, Movie } from '../types/app'
 import { API_ACCESS_TOKEN } from '@env'
 import MovieItem from '../components/MovieItem'
@@ -46,9 +46,27 @@ const MovieList = ({ title, path, coverType }: MovieListProps): JSX.Element => {
 
   return (
     <View>
-      <View style={styles.header}>
-        <View style={styles.purpleLabel}></View>
-        <Text style={styles.title}>{title}</Text>
+      <View style={styles.headerWrapper}>
+        <View style={styles.header}>
+          <View style={styles.purpleLabel}></View>
+          <Text style={styles.title}>{title}</Text>
+        </View>
+        <View>
+          <Pressable
+            style={({ pressed }) => [
+              {
+                backgroundColor: pressed ? 'rgb(210, 230, 255)' : 'white',
+              },
+              styles.btnHeader,
+            ]}
+          >
+            {({ pressed }) => (
+              <Text>
+                {pressed ? 'Pressed!' : 'Press Me'}
+              </Text>
+            )}
+          </Pressable>
+        </View>
       </View>
       <FlatList
         style={{
@@ -77,12 +95,21 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 10,
+  },
+  headerWrapper: {
+    justifyContent: 'space-between',
+  },
+  btnHeader: {
+    width: "20%",
+    display: "flex",
+    backgroundColor: '#fff',
   },
   purpleLabel: {
     width: 20,
     height: 40,
-    borderRadius: 20,
-    backgroundColor: '#8978A4',
+    borderRadius: 50,
+    backgroundColor: '#F4B336',
     marginRight: 12,
   },
   title: {
