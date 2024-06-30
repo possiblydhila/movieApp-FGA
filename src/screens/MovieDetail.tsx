@@ -52,6 +52,7 @@ export default function MovieDetail({ route }: any): JSX.Element {
       const initialData: string | null = await AsyncStorage.getItem('@FavoriteList');
       let favMovieList: Movie[] = initialData ? JSON.parse(initialData) : [];
       favMovieList = [...favMovieList, movie];
+      
       await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList));
       setIsFavorite(true);
     } catch (error) {
@@ -64,6 +65,7 @@ export default function MovieDetail({ route }: any): JSX.Element {
       const initialData: string | null = await AsyncStorage.getItem('@FavoriteList');
       let favMovieList: Movie[] = initialData ? JSON.parse(initialData) : [];
       favMovieList = favMovieList.filter((movie) => movie.id !== id);
+      
       await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList));
       setIsFavorite(false);
     } catch (error) {
