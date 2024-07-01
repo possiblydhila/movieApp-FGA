@@ -4,6 +4,7 @@ import { API_ACCESS_TOKEN } from '@env';
 import MovieItem from '../components/MovieItem';
 import { Movie } from '../types/app';
 
+
 export default function CategorySearchResult ({ route }: { route: any }): JSX.Element {
     
   const { width } = Dimensions.get('window');
