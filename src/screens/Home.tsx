@@ -43,7 +43,7 @@ type HomeScreenProps = {
               key={movieList.title}
             />
           ))}
-          {/* <StatusBar translucent={false} /> */}
+          <StatusBar translucent={false} />
         </View>
       </ScrollView>
     )
@@ -55,5 +55,7 @@ type HomeScreenProps = {
       alignItems: 'center',
       justifyContent: 'center',
       rowGap: 16,
+      paddingLeft: 5,
+      paddingRight: 5,
     },
   })
