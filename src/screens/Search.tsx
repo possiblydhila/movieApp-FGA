@@ -14,7 +14,7 @@ export default function Search(): JSX.Element {
   const [selectedBar, setSelectedBar] = useState<string>('keyword')
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View>
         <View style={styles.topBarContainer}>
           {['keyword', 'category'].map((item: string, index: number) => (
@@ -39,14 +39,13 @@ export default function Search(): JSX.Element {
         </View>
         {selectedBar === 'keyword' ? <KeywordSearch /> : <CategorySearch />}
       </View>
-    </ScrollView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    // marginTop: StatusBar.currentHeight ?? 32,
-    marginTop: 25,
+    marginTop: StatusBar.currentHeight ?? 32,
     padding: 15,
   },
   topBarContainer: {
