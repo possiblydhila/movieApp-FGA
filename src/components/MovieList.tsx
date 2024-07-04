@@ -47,7 +47,7 @@ const MovieList = ({ title, path, coverType }: MovieListProps): JSX.Element => {
   return (
     <View>
       <View style={styles.header}>
-        <View style={styles.purpleLabel}></View>
+        {/* <View style={styles.purpleLabel}></View> */}
         <Text style={styles.title}>{title}</Text>
       </View>
       <FlatList
@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '900',
+    marginLeft: 10,
   },
   movieList: {
     paddingLeft: 4,
